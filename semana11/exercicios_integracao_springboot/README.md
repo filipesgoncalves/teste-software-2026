@@ -1,4 +1,4 @@
-# SEMANA 11 — Testes de integração com Spring Boot
+# Semana 11: testes de integração com Spring Boot
 
 Java 17, Spring Boot 3.3, Spring Data JPA, H2, JUnit 5 e MockMvc. Nenhum mock substitui `ProdutoService` ou `ProdutoRepository`.
 
@@ -25,12 +25,22 @@ BUILD SUCCESS
 
 ## Discussão
 
-**`repository.findById()` x objeto retornado pelo serviço.** O objeto retornado pelo serviço só prova que o método devolveu algo; a consulta ao repositório prova que o registro foi gravado. Como o JPA mantém um cache de primeiro nível na mesma transação, os testes chamam `flush()` e `clear()` no `EntityManager` antes da consulta, forçando a leitura no H2.
+### Por que buscar com `repository.findById()` em vez de olhar só o objeto retornado pelo serviço?
 
-**`@Transactional` ao fim de cada teste.** O Spring abre uma transação por método de teste e faz rollback ao final, então nenhum teste enxerga dados de outro e a ordem de execução não importa.
+O objeto que o serviço devolve não garante que algo foi salvo. Buscando no repositório dá para confirmar que o produto está no banco. Antes da busca os testes chamam `flush()` e `clear()` no `EntityManager`, para o JPA ler do H2 e não do cache.
 
-**Componentes exercitados no Exercício 2.** Serialização JSON, `DispatcherServlet`, `ProdutoController`, `ProdutoService`, `ProdutoRepository`, Hibernate e H2, todos reais.
+### O que o `@Transactional` faz no fim de cada teste?
 
-**Por que o MockMvc dispensa servidor HTTP.** Ele chama o `DispatcherServlet` diretamente com requisições simuladas, na mesma thread e no mesmo contexto Spring do teste. Sem porta aberta, o rollback do `@Transactional` também vale para os dados gravados pela API.
+Desfaz tudo o que o teste gravou (rollback). Assim um teste não interfere no outro.
 
-**Diferença para o teste unitário do controller.** No teste unitário (`@WebMvcTest` com `@MockBean`) o serviço é simulado e só o mapeamento HTTP é verificado. Aqui as regras de negócio e a persistência rodam de verdade, então o teste detecta falhas na integração entre as camadas.
+### Quais componentes são exercitados no Exercício 2?
+
+Controller, service, repository, JPA e H2, todos reais.
+
+### Por que o MockMvc não precisa de um servidor HTTP?
+
+Ele simula a requisição e chama o Spring MVC direto, dentro do próprio teste, sem abrir porta.
+
+### Qual a diferença para um teste unitário do controller?
+
+No teste unitário o service seria um mock e só o controller seria testado. Aqui todas as camadas rodam juntas, então o teste pega erro na ligação entre elas.

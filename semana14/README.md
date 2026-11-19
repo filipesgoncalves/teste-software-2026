@@ -1,4 +1,4 @@
-# SEMANA 14 — Teste de Usuário Final
+# Semana 14: teste de usuário final
 
 Teste de usabilidade do fluxo de busca, comparação e simulação de compra no Mercado Livre, conforme `TESTE USUARIO FINAL.pdf`.
 
@@ -78,7 +78,7 @@ Cálculo: itens ímpares valem `nota − 1`, itens pares valem `5 − nota`; a s
 |---|---|---|---|---|
 | Taxa de sucesso no carrinho | usuários que concluíram T5 sem ajuda ÷ total | | ≥ 90% | |
 | Tempo médio | soma dos tempos totais ÷ usuários | | ≤ 4 min | |
-| Erros por usuário | total de erros ÷ usuários | | — | |
+| Erros por usuário | total de erros ÷ usuários | | sem meta | |
 | SUS médio | média das pontuações SUS | | > 68 | |
 
 ## Problemas encontrados
